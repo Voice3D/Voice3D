@@ -92,14 +92,14 @@ public class Player : MonoBehaviour
         counter = waitS.Length;
         if(counter > 0) waiter = true;  
         m_shotTimer = m_shotInterval;
-        shot_pos = transform.position;
-        shot_rot = transform.rotation;
+        shot_pos = transform.localPosition;
+        shot_rot = transform.localRotation;
         texts = new List<Text>();
     }
 
     public void ThrowArm(float speed) {
-        var pos = transform.position; // プレイヤーの位置
-        var rot = transform.rotation; // プレイヤーの向き
+        var pos = transform.localPosition; // プレイヤーの位置
+        var rot = transform.localRotation; // プレイヤーの向き
         var arm = Instantiate(m_armPrefab, pos, rot);
         
             // 弾を発射する方向と速さを設定する

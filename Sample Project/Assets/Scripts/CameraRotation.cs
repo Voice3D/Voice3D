@@ -17,7 +17,7 @@ public class CameraRotation : MonoBehaviour {
         float dy = Input.GetAxisRaw("Camera_y");
         
         //Debug.Log(dx+":"+dy);
-        Vector3 p_posi = player.transform.position;
+        Vector3 p_posi = player.transform.localPosition;
         if (!((-30 > ud_deg && dy < 0) || (ud_deg > 30 && dy > 0)) && dy!=0)
         {
             var angle = -rl_deg;
@@ -31,7 +31,6 @@ public class CameraRotation : MonoBehaviour {
         }
         transform.RotateAround(p_posi, Vector3.up, dx * rate);
         rl_deg += dx * rate;
-        //player.transform.GetChild(0).eulerAngles = transform.localRotation.eulerAngles;
-        /*照準がカメラとキャラの二つに存しているため不具合がある*/
+        player.transform.GetChild(0).localRotation = transform.localRotation;
     }
 }

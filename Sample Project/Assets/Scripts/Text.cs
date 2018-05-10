@@ -14,7 +14,7 @@ public class Text : MonoBehaviour {
         // 移動する
         if (!(m_stop))
         {
-            if (m_on_rail) transform.RotateAround(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 45 * Time.deltaTime);
+            if (m_on_rail) transform.RotateAround(new Vector3(0, 0, 0), new Vector3(0, 1, 0), 45 * Time.deltaTime);
             else transform.localPosition += m_velocity;
         }
         if (!(m_on_rail) && Vector3.Distance(transform.localPosition, new Vector3(0, transform.localPosition.y, 0)) >= m_cylR)
