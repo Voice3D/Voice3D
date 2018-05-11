@@ -6,11 +6,13 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public static Player p;
-    public Text m_textPrefab; // 弾のプレハブ
+    public MyText m_textPrefab; // 弾のプレハブ
     public Arm m_armPrefab;
+    public VoiceRecognition m_vr;
     public float m_shotSpeed; // 弾の移動の速さ
     public float m_shotTimer;
     public float m_shotInterval;
+    public int m_opeCount = 2;
 
     public int ScreenWidth;
     public int ScreenHeight;
@@ -21,7 +23,9 @@ public class Player : MonoBehaviour
     private int strCount=0;
     private Vector3 shot_pos;
     private Quaternion shot_rot;
-    private List<Text> texts;
+    private List<MyText> texts;
+    private bool triggerOn = false;
+    private int m_mode = 0;
 
     public LayerMask mask;
 
@@ -46,7 +50,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         
-               
+        //照準の向き、及びアーム発射制御
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         //Debug.DrawRay(ray.origin, ray.direction * 30, Color.red, 3.0f);
@@ -61,6 +65,20 @@ public class Player : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Fire1")) ThrowArm(m_shotSpeed);
 
+        //音声認識の開始、停止、モードの制御
+        if(!triggerOn && Input.GetAxis("Ltrigger") == 1)
+        {
+            triggerOn = true;
+            m_vr.StartRecognition(m_mode);
+        }
+        if (triggerOn && Input.GetAxis("Ltrigger") == 0)
+        {
+            triggerOn = false;
+            m_vr.StopRecognition(m_mode);
+        }
+        if (!triggerOn && Input.GetButtonDown("change")) m_mode = (m_mode + 1) % m_vr.keyCount;
+
+        //テキスト発射制御
         if (waiter)
         {
 
@@ -87,19 +105,21 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ThrowText(string s) {
+    public void ThrowText(string s)//テキスト発射要請
+    {
         waitS = s;
         counter = waitS.Length;
         if(counter > 0) waiter = true;  
         m_shotTimer = m_shotInterval;
         shot_pos = transform.localPosition;
         shot_rot = transform.localRotation;
-        texts = new List<Text>();
+        texts = new List<MyText>();
     }
 
-    public void ThrowArm(float speed) {
-        var pos = transform.localPosition; // プレイヤーの位置
-        var rot = transform.localRotation; // プレイヤーの向き
+    public void ThrowArm(float speed)//アーム発射
+    {
+        var pos = transform.position; // プレイヤーの位置
+        var rot = transform.rotation; // プレイヤーの向き
         var arm = Instantiate(m_armPrefab, pos, rot);
         
             // 弾を発射する方向と速さを設定する
@@ -109,8 +129,7 @@ public class Player : MonoBehaviour
 
     }
 
-    // 弾を発射する関数
-    private void ShootText(int i, float speed, char c)
+    private void ShootText(int i, float speed, char c)//テキスト発射
     {
         var pos = shot_pos; // プレイヤーの位置
         var rot = shot_rot; // プレイヤーの向き
@@ -121,5 +140,10 @@ public class Player : MonoBehaviour
         text.Init(i, speed, c.ToString());
         texts.Add(text);
         
-    }  
+    }
+
+    public int GetMode()//モード取得
+    {
+        return m_mode;
+    }
 }

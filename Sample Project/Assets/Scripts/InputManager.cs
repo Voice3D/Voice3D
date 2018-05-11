@@ -6,7 +6,7 @@ public class InputManager : MonoBehaviour
 {
 
     InputField inputField;
-
+    private int opeCode;
 
     /// <summary>
     /// Startメソッド
@@ -32,7 +32,20 @@ public class InputManager : MonoBehaviour
     {
 
         string inputValue = inputField.text;
-        if (inputValue.Length > 0 && inputValue[0] == '/') TextManager.Operation(inputValue);
+        if (inputValue.Length > 0 && inputValue[0] == '/')
+        {
+            switch (inputValue)
+            {
+
+                case "/stop":
+                    opeCode = 0;
+                    break;
+                case "/start":
+                    opeCode = 1;
+                    break;
+            }
+            TextManager.Operation(opeCode);
+        }
         else Player.p.ThrowText(inputValue);
 
         InitInputField();
