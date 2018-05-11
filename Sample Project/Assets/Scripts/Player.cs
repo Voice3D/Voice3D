@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public float m_shotSpeed; // 弾の移動の速さ
     public float m_shotTimer;
     public float m_shotInterval;
-    public int m_opeCount = 2;
+    public int MaxLength;
 
     public int ScreenWidth;
     public int ScreenHeight;
@@ -26,12 +26,15 @@ public class Player : MonoBehaviour
     private List<MyText> texts;
     private bool triggerOn = false;
     private int m_mode = 0;
+    private int textSize;
+    private string[] keywords = { "ストップ", "スタート" };
 
     public LayerMask mask;
 
     // ゲーム開始時に呼び出される関数
     private void Awake()
     {
+        /*
         // PC向けビルドだったらサイズ変更
         if (Application.platform == RuntimePlatform.WindowsPlayer ||
         Application.platform == RuntimePlatform.OSXPlayer ||
@@ -39,7 +42,7 @@ public class Player : MonoBehaviour
         {
             Screen.SetResolution(ScreenWidth, ScreenHeight, false);
         }
-
+        */
         // 他のクラスからプレイヤーを参照できるように
         // static 変数にインスタンス情報を格納する
         p = this;
@@ -53,47 +56,35 @@ public class Player : MonoBehaviour
         //照準の向き、及びアーム発射制御
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        //Debug.DrawRay(ray.origin, ray.direction * 30, Color.red, 3.0f);
-        //Debug.Log(Physics.Raycast(ray, out hit, 30));
         if (Physics.Raycast(ray, out hit, 30))
         {
-            //Debug.Log(hit.point.z);
             transform.LookAt(hit.point);
-            //Transform objectHit = hit.transform;
-
-            // Do something with the object that was hit by the raycast.
         }
         if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Fire1")) ThrowArm(m_shotSpeed);
 
         //音声認識の開始、停止、モードの制御
-        if(!triggerOn && Input.GetAxis("Ltrigger") == 1)
+        if (!triggerOn && Input.GetAxis("Ltrigger") == 1)
         {
             triggerOn = true;
-            m_vr.StartRecognition(m_mode);
+            m_vr.StartRecognition();
         }
         if (triggerOn && Input.GetAxis("Ltrigger") == 0)
         {
             triggerOn = false;
-            m_vr.StopRecognition(m_mode);
+            m_vr.StopRecognition();
         }
-        if (!triggerOn && Input.GetButtonDown("change")) m_mode = (m_mode + 1) % m_vr.keyCount;
+        if (!triggerOn && Input.GetButtonDown("change")) m_mode = (m_mode + 1) % keywords.Length;
 
         //テキスト発射制御
         if (waiter)
         {
-
-            // 弾の発射タイミングを管理するタイマーを更新する
+            //テキスト発射間隔の調整
             m_shotTimer += Time.deltaTime;
-
-            // まだ弾の発射タイミングではない場合は、ここで処理を終える
             if (m_shotTimer < m_shotInterval) return;
-
-            // 弾の発射タイミングを管理するタイマーをリセットする
             m_shotTimer = 0;
 
 
-            // 弾を発射する
-            //Debug.Log(counter);
+            // テキストを発射する
             ShootText(strCount, m_shotSpeed, waitS[waitS.Length-counter]);
             counter--;
             if (counter == 0)
@@ -107,12 +98,22 @@ public class Player : MonoBehaviour
 
     public void ThrowText(string s)//テキスト発射要請
     {
+        if (m_mode == 1)
+        {
+            OpeRecognize(s);
+            return;
+        }
         waitS = s;
         counter = waitS.Length;
+        textSize = 1;
+        if (counter > MaxLength)
+        {
+            Debug.Log("erorr:Too Long");
+        }
         if(counter > 0) waiter = true;  
         m_shotTimer = m_shotInterval;
-        shot_pos = transform.localPosition;
-        shot_rot = transform.localRotation;
+        shot_pos = transform.position;
+        shot_rot = transform.rotation;
         texts = new List<MyText>();
     }
 
@@ -121,12 +122,7 @@ public class Player : MonoBehaviour
         var pos = transform.position; // プレイヤーの位置
         var rot = transform.rotation; // プレイヤーの向き
         var arm = Instantiate(m_armPrefab, pos, rot);
-        
-            // 弾を発射する方向と速さを設定する
-            arm.Init(speed, transform.forward);
-       
-
-
+        arm.Init(speed, transform.forward);　//アーム初期値設定
     }
 
     private void ShootText(int i, float speed, char c)//テキスト発射
@@ -134,16 +130,27 @@ public class Player : MonoBehaviour
         var pos = shot_pos; // プレイヤーの位置
         var rot = shot_rot; // プレイヤーの向き
 
-                    // 発射する弾を生成する
-            // 発射する弾を生成する
         var text = Instantiate(m_textPrefab, pos, rot);
-        text.Init(i, speed, c.ToString());
-        texts.Add(text);
-        
+        text.Init(i, speed, c.ToString(), textSize);
+        texts.Add(text);        
     }
 
     public int GetMode()//モード取得
     {
         return m_mode;
+    }
+
+    private void OpeRecognize(string s)
+    {
+        int opeCode = -1;
+        for (int i = 0; i < keywords.Length; i++)
+        {
+            if (s == keywords[i])
+            {
+                opeCode = i;
+                break;
+            }
+        }
+        TextManager.Operation(opeCode);
     }
 }

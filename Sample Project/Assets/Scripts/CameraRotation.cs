@@ -18,7 +18,7 @@ public class CameraRotation : MonoBehaviour {
         
         //Debug.Log(dx+":"+dy);
         Vector3 p_posi = player.transform.localPosition;
-        if (!((-30 > ud_deg && dy < 0) || (ud_deg > 30 && dy > 0)) && dy!=0)
+        if (!((-45  > ud_deg && dy < 0) || (ud_deg > 45 && dy > 0)) && dy!=0)
         {
             var angle = -rl_deg;
             //if (transform.localPosition.x > p_posi.x) angle *= -1;
@@ -31,6 +31,6 @@ public class CameraRotation : MonoBehaviour {
         }
         transform.RotateAround(p_posi, Vector3.up, dx * rate);
         rl_deg += dx * rate;
-        player.transform.GetChild(0).localRotation = transform.localRotation;
+        player.transform.localRotation = transform.localRotation;
     }
 }

@@ -27,7 +27,7 @@ public class TextManager : MonoBehaviour {
 	}
 
     //テキスト位置更新
-    public void PosiText(int t_id)
+    public void PosiText(int t_id, int t_size)
     {
         if (pre_id != t_id)
         {
@@ -37,7 +37,7 @@ public class TextManager : MonoBehaviour {
             {
                 for (int j = 0; j < LineManager[i].Count; j++)
                 {
-                    LineManager[i][j].GetComponent<MyText>().transform.localPosition -= new Vector3(0, (m_top - m_bottom) / m_dev, 0);
+                    LineManager[i][j].GetComponent<MyText>().transform.localPosition -= new Vector3(0, (m_top - m_bottom) / m_dev*t_size, 0);
                 }
             }
             //Debug.Log(strs[t_id]);

@@ -358,7 +358,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1000
+  m_Intensity: 20
   m_Range: 18
   m_SpotAngle: 10
   m_CookieSize: 10
@@ -791,7 +791,7 @@ GameObject:
   - component: {fileID: 1026031141}
   - component: {fileID: 1026031140}
   m_Layer: 5
-  m_Name: Text
+  m_Name: VoiceRecognition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -826,7 +826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac934ce2efd33514eb5150f6103fe64f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyCount: 0
 --- !u!114 &1026031141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -897,11 +896,11 @@ MonoBehaviour:
     type: 2}
   m_armPrefab: {fileID: 114588892698919458, guid: 375986000863464438eaf74fdff64eb7,
     type: 2}
-  m_vr: {fileID: 0}
+  m_vr: {fileID: 1026031140}
   m_shotSpeed: 0.08
   m_shotTimer: 0
   m_shotInterval: 0.2
-  m_opeCount: 2
+  MaxLength: 20
   ScreenWidth: 0
   ScreenHeight: 0
   mask:
@@ -914,7 +913,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1502223483}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 420055211}

@@ -17,7 +17,7 @@ public class Arm : MonoBehaviour
         else transform.localPosition -= m_velocity;
         if (!(m_on_rail) && Vector3.Distance(transform.localPosition, new Vector3(0, transform.localPosition.y, 0)) >= m_cylR)
         {
-            m_on_rail = true;   
+            m_on_rail = true;
         }
     }
 
@@ -30,11 +30,13 @@ public class Arm : MonoBehaviour
         Destroy(gameObject, 30);
     }
 
-    public void OnCollisionEnter(Collision col) {
+    private void OnTriggerEnter(Collider other)
+    {
         Debug.Log("catch");
-        if (col.gameObject.tag == "Text") {
+        if (other.gameObject.tag == "Text")
+        {
             Debug.Log("check");
-            col.gameObject.transform.parent = transform;
+            other.gameObject.transform.parent = transform;
         }
     }
 }

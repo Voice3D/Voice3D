@@ -8,6 +8,7 @@ public class MyText : MonoBehaviour {
     public bool m_stop;
     public int m_cylR;
     public int m_id;
+    public int m_size;
     	
 	// Update is called once per frame
 	void Update () {
@@ -22,7 +23,7 @@ public class MyText : MonoBehaviour {
             m_on_rail = true;
             transform.LookAt(new Vector3(0, transform.localPosition.y, 0));
             transform.Rotate(new Vector3(0, 180, 0));
-            TextManager.tm.PosiText(m_id);
+            TextManager.tm.PosiText(m_id, m_size);
             float ps = (float)TextManager.tm.m_top;
             Vector3 temp = transform.localPosition;
             temp.y = ps;
@@ -30,16 +31,14 @@ public class MyText : MonoBehaviour {
         }
     }
 
-    public void Init(int i, float speed, string c)
+    public void Init(int i, float speed, string c, int size)
     {
         var direction = transform.forward;
-
+        m_size = size;
         // 発射角度と速さから速度を求める
         m_velocity = direction * speed;
 
         m_id = i;
         GetComponent<TextMesh>().text = c;
-     
-        //Destroy(gameObject, 30);
     }
 }
