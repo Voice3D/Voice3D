@@ -30,7 +30,8 @@ public class CameraRotation : MonoBehaviour {
             ud_deg += dy * rate;
         }
         transform.RotateAround(p_posi, Vector3.up, dx * rate);
+        player.transform.Rotate(0, dx * rate, 0);
         rl_deg += dx * rate;
-        player.transform.localRotation = transform.localRotation;
+        player.transform.GetChild(0).localEulerAngles = new Vector3(transform.localEulerAngles.x, 0, transform.localEulerAngles.z);
     }
 }

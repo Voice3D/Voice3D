@@ -41,11 +41,11 @@ public class VoiceRecognition : MonoBehaviour
 
     public void StartRecognition()
     {
-        dicRecognizer.Start();
+        if(dicRecognizer.Status == SpeechSystemStatus.Stopped) dicRecognizer.Start();
     }
 
     public void StopRecognition()
     {
-        dicRecognizer.Stop();
+        if (dicRecognizer.Status == SpeechSystemStatus.Running) dicRecognizer.Stop();
     }
 }

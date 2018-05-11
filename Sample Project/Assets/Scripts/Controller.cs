@@ -83,6 +83,7 @@ public class Controller : MonoBehaviour
             }
             Camera.main.GetComponent<Rigidbody>().velocity = rb.velocity;
             //スペースキーでジャンプする
+            /*
             if (Input.GetButtonDown("Jump"))
             {
                 //Debug.Log("速度: " + rb.velocity+":"+ Camera.main.GetComponent<Rigidbody>().velocity);
@@ -98,6 +99,7 @@ public class Controller : MonoBehaviour
             {
                 animator.SetBool("Jumping", false);
             }
+            */
         }
     }
 
