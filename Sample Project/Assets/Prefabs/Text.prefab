@@ -141,3 +141,6 @@ MonoBehaviour:
   m_stop: 0
   m_cylR: 10
   m_id: 0
+  m_size: 0
+  m_rotSpeed: 10
+  rotation: 0

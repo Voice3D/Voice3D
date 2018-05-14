@@ -9,10 +9,12 @@ public class Player : MonoBehaviour
     public MyText m_textPrefab; // 弾のプレハブ
     public Arm m_armPrefab;
     public VoiceRecognition m_vr;
+    public Pivot m_pivotPrefab;
     public float m_shotSpeed; // 弾の移動の速さ
     public float m_shotTimer;
     public float m_shotInterval;
     public int MaxLength;
+    public int maxStrs;
 
     public int ScreenWidth;
     public int ScreenHeight;
@@ -60,7 +62,7 @@ public class Player : MonoBehaviour
         {
             transform.LookAt(hit.point);
         }
-        if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Fire1")) ThrowArm(m_shotSpeed);
+        //if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Fire1")) ThrowArm(m_shotSpeed);
 
         //音声認識の開始、停止、モードの制御
         if (!triggerOn && Input.GetAxis("Ltrigger") == 1)
@@ -91,7 +93,7 @@ public class Player : MonoBehaviour
             {
                 waiter = false;
                 TextManager.strs.Add(strCount, texts);
-                strCount = (strCount + 1) % 10;  
+                strCount = (strCount + 1) % maxStrs;  
             }
         }
     }
@@ -109,6 +111,7 @@ public class Player : MonoBehaviour
         if (counter > MaxLength)
         {
             Debug.Log("erorr:Too Long");
+            return;
         }
         if(counter > 0) waiter = true;  
         m_shotTimer = m_shotInterval;
@@ -130,7 +133,9 @@ public class Player : MonoBehaviour
         var pos = shot_pos; // プレイヤーの位置
         var rot = shot_rot; // プレイヤーの向き
 
+        var pivot = Instantiate(m_pivotPrefab, pos, rot);
         var text = Instantiate(m_textPrefab, pos, rot);
+        text.transform.parent = pivot.transform;
         text.Init(i, speed, c.ToString(), textSize);
         texts.Add(text);        
     }

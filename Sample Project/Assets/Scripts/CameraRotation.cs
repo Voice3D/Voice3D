@@ -16,21 +16,17 @@ public class CameraRotation : MonoBehaviour {
         float dx = Input.GetAxisRaw("Camera_x");
         float dy = Input.GetAxisRaw("Camera_y");
         
-        //Debug.Log(dx+":"+dy);
         Vector3 p_posi = player.transform.localPosition;
         if (!((-45  > ud_deg && dy < 0) || (ud_deg > 45 && dy > 0)) && dy!=0)
         {
             var angle = -rl_deg;
-            //if (transform.localPosition.x > p_posi.x) angle *= -1;
-            //Vector3 my_axis = new Vector3(p_posi.z-transform.localPosition.z, 0, -1/(p_posi.x-transform.localPosition.x));
             transform.RotateAround(p_posi, Vector3.up, angle);
-            Debug.Log(transform.localPosition+", "+angle);
             transform.RotateAround(p_posi, Vector3.right, dy * rate/3);
             transform.RotateAround(p_posi, Vector3.up, -angle);
             ud_deg += dy * rate;
         }
         transform.RotateAround(p_posi, Vector3.up, dx * rate);
-        player.transform.Rotate(0, dx * rate, 0);
+        player.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         rl_deg += dx * rate;
         player.transform.GetChild(0).localEulerAngles = new Vector3(transform.localEulerAngles.x, 0, transform.localEulerAngles.z);
     }

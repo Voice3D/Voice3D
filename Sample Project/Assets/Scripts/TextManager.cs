@@ -37,7 +37,7 @@ public class TextManager : MonoBehaviour {
             {
                 for (int j = 0; j < LineManager[i].Count; j++)
                 {
-                    LineManager[i][j].GetComponent<MyText>().transform.localPosition -= new Vector3(0, (m_top - m_bottom) / m_dev*t_size, 0);
+                    LineManager[i][j].GetComponent<MyText>().transform.parent.position -= new Vector3(0, (m_top - m_bottom) / m_dev*t_size, 0);
                 }
             }
             //Debug.Log(strs[t_id]);
@@ -57,9 +57,8 @@ public class TextManager : MonoBehaviour {
             case 0:
                 for (int i = 0; i < LineManager.Count; i++) {
                     for (int j = 0; j < LineManager[i].Count; j++) {
-                        LineManager[i][j].m_stop = true;
+                        if (LineManager[i][j] != null) LineManager[i][j].m_stop = true;
                     }
-
                 }
                 break;
             case 1:
@@ -67,9 +66,8 @@ public class TextManager : MonoBehaviour {
                 {
                     for (int j = 0; j < LineManager[i].Count; j++)
                     {
-                        LineManager[i][j].m_stop = false;
+                        if (LineManager[i][j] != null) LineManager[i][j].m_stop = false;
                     }
-
                 }
                 break;
             default:
