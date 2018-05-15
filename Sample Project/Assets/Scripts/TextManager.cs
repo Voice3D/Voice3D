@@ -32,7 +32,6 @@ public class TextManager : MonoBehaviour {
         if (pre_id != t_id)
         {
             pre_id = t_id;
-            //foreach (int key in strs.Keys) Debug.Log(key+":"+t_id);
             for (int i = 0; i < LineManager.Count; i++)
             {
                 for (int j = 0; j < LineManager[i].Count; j++)
@@ -40,15 +39,21 @@ public class TextManager : MonoBehaviour {
                     LineManager[i][j].GetComponent<MyText>().transform.parent.position -= new Vector3(0, (m_top - m_bottom) / m_dev*t_size, 0);
                 }
             }
-            //Debug.Log(strs[t_id]);
-            if(LineManager.Count==m_dev) LineManager.RemoveAt(m_dev);
+            if (LineManager.Count == m_dev)
+            {
+                var temp = LineManager[m_dev - 1];
+                LineManager.RemoveAt(m_dev - 1);
+                foreach (MyText i in temp)
+                {
+                    Destroy(i.transform.parent.gameObject);
+                }
+                temp.Clear();
+            }
             if (LineManager.Count != 0) LineManager.Insert(0, strs[t_id]);
             else LineManager.Add(strs[t_id]);
             
         }
-
         return;
-
     }
 
     //音声コマンド処理
@@ -76,8 +81,4 @@ public class TextManager : MonoBehaviour {
         }
         return;
     }
-
-
-
-
 }

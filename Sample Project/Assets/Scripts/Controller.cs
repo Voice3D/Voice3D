@@ -30,6 +30,7 @@ public class Controller : MonoBehaviour
         //地面に触れている場合発動
         if (ground)
         {
+            //ユニティちゃんの移動
             float dx = Input.GetAxisRaw("Horizontal");
             float dy = Input.GetAxisRaw("Vertical");
            
@@ -54,15 +55,11 @@ public class Controller : MonoBehaviour
             //スペースキーでジャンプする
             /*
             if (Input.GetButtonDown("Jump"))
-            {
-                //Debug.Log("速度: " + rb.velocity+":"+ Camera.main.GetComponent<Rigidbody>().velocity);
-                Debug.Log(dx + ":" + dy);
-                //Debug.Log(Input.GetAxis("Rtrigger"));
+            {               
                 animator.SetBool("Jumping", true);
                 //上方向に向けて力を加える
                 rb.AddForce(new Vector3(0, thrust, 0));
-                ground = false;
-                //Debug.Log(Vector3.Angle(Vector3.right, new Vector3(dx, 0, dy)) - 90);
+                ground = false;               
             }
             else
             {
@@ -72,10 +69,8 @@ public class Controller : MonoBehaviour
         }
     }
 
-     //別のCollider、今回はPlaneに触れているかどうかを判断する
-    void OnCollisionStay(Collision col)
+    void OnCollisionStay(Collision col)//ジャンプを模もし実装するなら使うかも
     {
-        //Debug.Log("check");
         ground = true;
     }
 }

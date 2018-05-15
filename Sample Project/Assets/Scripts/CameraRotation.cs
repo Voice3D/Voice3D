@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraRotation : MonoBehaviour {
+public class CameraRotation : MonoBehaviour {// カメラの向きを制御
     public float rate;
     public Controller player;
     private float ud_deg=0, rl_deg=0;

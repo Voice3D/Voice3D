@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pivot : MonoBehaviour {
-    public bool rotation;
-    public float rotSpeed;
+    //文字の回転軸を調整するために用いる
 	// Use this for initialization
 	void Start () {
 		

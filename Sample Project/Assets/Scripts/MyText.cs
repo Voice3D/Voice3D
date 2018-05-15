@@ -38,7 +38,7 @@ public class MyText : MonoBehaviour {
         }
     }
 
-    public void Init(int i, float speed, string c, int size)
+    public void Init(int i, float speed, string c, int size)//文字生成時の初期化
     {
         var direction = transform.parent.forward;
         m_size = size;

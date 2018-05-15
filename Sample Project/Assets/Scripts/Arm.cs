@@ -4,39 +4,72 @@ using UnityEngine;
 
 public class Arm : MonoBehaviour
 {
-    private Vector3 m_velocity; // 速度
-    public bool m_on_rail;
+    private List<MyText> myTexts = new List<MyText>();
+    private int stop = 1;
+    private int have = 0;
     public int m_cylR;
-    public int m_id;
+    public float speed;
 
     // Update is called once per frame
     void Update()
     {
-        // 移動する
-        if (!(m_on_rail)) transform.localPosition += m_velocity;
-        else transform.localPosition -= m_velocity;
-        if (!(m_on_rail) && Vector3.Distance(transform.localPosition, new Vector3(0, transform.localPosition.y, 0)) >= m_cylR)
+        //選択した文字の回収
+        if (have == 1 && Input.GetAxis("Rtrigger") == 0)
         {
-            m_on_rail = true;
+            have = 2;
+            foreach (MyText i in myTexts)
+            {
+                i.transform.parent.parent = transform;
+            }
+        }
+        // 移動する
+        if (stop == 2 && (Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) < m_cylR)) stop = 0;        
+        if (stop != 2 && Input.GetAxis("Rtrigger") == 1)
+        {
+            stop = 0;
+            transform.position += transform.parent.forward * speed;
+        }
+        if (stop != 1 && Input.GetAxis("Rtrigger") == 0)
+        {
+            stop = 0;
+            transform.position -= transform.parent.forward * speed;
+        }
+        if (stop == 2 && Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) > m_cylR+0.5)
+        {
+            transform.position -= transform.parent.forward * speed;
+        }
+
+        if (stop==0)
+        {
+            if (Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) > m_cylR)
+            {
+                stop = 2;
+            }
+            else if (Vector3.Distance(transform.localPosition, new Vector3(0, transform.localPosition.y, 0)) < 0.5)
+            {
+                have = 0;
+                stop = 1;
+                var count = myTexts.Count;
+                Debug.Log(count);
+                foreach(MyText i in myTexts)
+                {
+                    i.gameObject.SetActive(false);
+                    i.transform.parent.parent = null;
+                }
+                myTexts.Clear();
+            }
         }
     }
 
-    public void Init(float speed, Vector3 direction)
+    private void OnTriggerStay(Collider other)
     {
-
-        // 発射角度と速さから速度を求める
-        m_velocity = direction * speed;
-
-        Destroy(gameObject, 30);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("catch");
-        if (other.gameObject.tag == "Text")
+        //文字を選択状態にする
+        if (other.gameObject.tag == "Text" && Input.GetButtonDown("Fire1") && have != 2)
         {
-            Debug.Log("check");
-            other.gameObject.transform.parent = transform;
+            other.gameObject.GetComponent<MyText>().rotation = true;
+            myTexts.Add(other.gameObject.GetComponent<MyText>());
+            have = 1;
         }
     }
 }
+

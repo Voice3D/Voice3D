@@ -7,7 +7,6 @@ public class Player : MonoBehaviour
 {
     public static Player p;
     public MyText m_textPrefab; // 弾のプレハブ
-    public Arm m_armPrefab;
     public VoiceRecognition m_vr;
     public Pivot m_pivotPrefab;
     public float m_shotSpeed; // 弾の移動の速さ
@@ -62,7 +61,6 @@ public class Player : MonoBehaviour
         {
             transform.LookAt(hit.point);
         }
-        //if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Fire1")) ThrowArm(m_shotSpeed);
 
         //音声認識の開始、停止、モードの制御
         if (!triggerOn && Input.GetAxis("Ltrigger") == 1)
@@ -120,14 +118,6 @@ public class Player : MonoBehaviour
         texts = new List<MyText>();
     }
 
-    public void ThrowArm(float speed)//アーム発射
-    {
-        var pos = transform.position; // プレイヤーの位置
-        var rot = transform.rotation; // プレイヤーの向き
-        var arm = Instantiate(m_armPrefab, pos, rot);
-        arm.Init(speed, transform.forward);　//アーム初期値設定
-    }
-
     private void ShootText(int i, float speed, char c)//テキスト発射
     {
         var pos = shot_pos; // プレイヤーの位置
@@ -145,7 +135,7 @@ public class Player : MonoBehaviour
         return m_mode;
     }
 
-    private void OpeRecognize(string s)
+    private void OpeRecognize(string s)//入力の音声コマンドから命令の種類を決定し実行
     {
         int opeCode = -1;
         for (int i = 0; i < keywords.Length; i++)
