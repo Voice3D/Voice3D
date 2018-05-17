@@ -42,7 +42,6 @@ public class MyText : MonoBehaviour {
     {
         var direction = transform.parent.forward;
         m_size = size;
-        // 発射角度と速さから速度を求める
         m_velocity = direction * speed;
         transform.localPosition = new Vector3(0, 0.75f, 0);
         transform.localEulerAngles = Vector3.zero;

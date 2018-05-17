@@ -4,8 +4,6 @@ using UnityEngine.UI;
 // 情報表示用の UI を制御するコンポーネント
 public class Hud : MonoBehaviour
 {
-
-    //public Text m_vText;// レベルのテキスト
     public Text m_Mode;
     public Text m_Trigger;
     public Player m_player;

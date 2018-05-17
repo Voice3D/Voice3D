@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-
     Rigidbody rb;
     //移動スピード
     public float speed = 4f;
@@ -13,7 +12,8 @@ public class Controller : MonoBehaviour
     //Animatorを入れる変数
     private Animator animator;
     //Planeに触れているか判定するため
-    bool ground;
+    private bool ground=false;
+    private Vector3 prePosi;
     int sign;
     Vector3 angle;
 
@@ -22,6 +22,7 @@ public class Controller : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         //UnityちゃんのAnimatorにアクセスする
         animator = GetComponent<Animator>();
+        prePosi = transform.position;
     }
 
     void Update()
@@ -51,7 +52,7 @@ public class Controller : MonoBehaviour
                 transform.localEulerAngles = new Vector3(0, angle.y, 0);
                 animator.SetBool("Running", true);
             }
-            Camera.main.GetComponent<Rigidbody>().velocity = rb.velocity;
+            Camera.main.transform.position += transform.position - prePosi;
             //スペースキーでジャンプする
             /*
             if (Input.GetButtonDown("Jump"))
@@ -67,9 +68,10 @@ public class Controller : MonoBehaviour
             }
             */
         }
+        prePosi = transform.position;
     }
 
-    void OnCollisionStay(Collision col)//ジャンプを模もし実装するなら使うかも
+    void OnCollisionStay(Collision col)//ジャンプをもし実装するなら使うかも
     {
         ground = true;
     }

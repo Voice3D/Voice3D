@@ -5,6 +5,7 @@ using UnityEngine;
 public class TextManager : MonoBehaviour {
     private int next=-1;
     private int pre_id=-1;
+    public static bool textStop = false;
     public static TextManager tm;
     public int m_top, m_bottom, m_dev;//文字列が周回する領域の、一番高いところ、低いところ、何列に分けるか
     public static Dictionary<int, List<MyText>> strs = new Dictionary<int, List<MyText>>();//空間に存在する文字列を格納
@@ -18,7 +19,6 @@ public class TextManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
     }
 
 	// Update is called once per frame
@@ -65,6 +65,7 @@ public class TextManager : MonoBehaviour {
                         if (LineManager[i][j] != null) LineManager[i][j].m_stop = true;
                     }
                 }
+                textStop = true;
                 break;
             case 1:
                 for (int i = 0; i < LineManager.Count; i++)
@@ -74,6 +75,7 @@ public class TextManager : MonoBehaviour {
                         if (LineManager[i][j] != null) LineManager[i][j].m_stop = false;
                     }
                 }
+                textStop = false;
                 break;
             default:
                 Debug.Log("erorr: opeCode = "+code);

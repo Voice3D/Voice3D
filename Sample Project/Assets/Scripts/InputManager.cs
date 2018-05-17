@@ -4,33 +4,20 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
-
     InputField inputField;
     private int opeCode;
 
-    /// <summary>
-    /// Startメソッド
-    /// InputFieldコンポーネントの取得および初期化メソッドの実行
-    /// </summary>
+    //InputFieldコンポーネントの取得および初期化メソッドの実行
     void Start()
     {
-
         inputField = GetComponent<InputField>();
 
         InitInputField();
     }
 
-
-
-    /// <summary>
-    /// Log出力用メソッド
-    /// 入力値を取得してLogに出力し、初期化
-    /// </summary>
-
-
+    //入力文字列を処理
     public void InputLogger()
     {
-
         string inputValue = inputField.text;
         if (inputValue.Length > 0 && inputValue[0] == '/')
         {
@@ -51,17 +38,9 @@ public class InputManager : MonoBehaviour
         InitInputField();
     }
 
-
-
-    /// <summary>
-    /// InputFieldの初期化用メソッド
-    /// 入力値をリセットして、フィールドにフォーカスする
-    /// </summary>
-
-
+    // InputFieldの初期化用メソッド
     void InitInputField()
     {
-
         // 値をリセット
         inputField.text = "";
 

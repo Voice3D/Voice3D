@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// プレイヤーを制御するコンポーネント
+// 文字発射デバイスを制御するコンポーネント
 public class Player : MonoBehaviour
 {
     public static Player p;
@@ -98,7 +98,8 @@ public class Player : MonoBehaviour
 
     public void ThrowText(string s)//テキスト発射要請
     {
-        if (m_mode == 1)
+        if (waiter || TextManager.textStop) return;//テキスト発射中もしくは文字の回転が停止中の場合は文字を発射しない
+        if (m_mode == 1)//音声コマンド
         {
             OpeRecognize(s);
             return;
