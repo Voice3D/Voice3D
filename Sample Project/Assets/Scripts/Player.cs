@@ -8,12 +8,16 @@ public class Player : MonoBehaviour
     public static Player p;
     public MyText m_textPrefab; // 弾のプレハブ
     public VoiceRecognition m_vr;
+    public MainPanel main_p;
+    public MenuPanel menu_p;
     public Pivot m_pivotPrefab;
     public float m_shotSpeed; // 弾の移動の速さ
     public float m_shotTimer;
     public float m_shotInterval;
     public int MaxLength;
     public int maxStrs;
+    public List<List<MyText>> inventory;
+    public bool menu = false;
 
     public int ScreenWidth;
     public int ScreenHeight;
@@ -53,7 +57,12 @@ public class Player : MonoBehaviour
     // 毎フレーム呼び出される関数
     private void Update()
     {
-        
+        //表示、非表示の変更
+        if (Input.GetButtonDown("Menu")) menu = !menu;
+        menu_p.gameObject.SetActive(menu);
+        transform.GetChild(1).gameObject.SetActive(!menu);
+
+
         //照準の向き、及びアーム発射制御
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -80,7 +89,7 @@ public class Player : MonoBehaviour
         {
             //テキスト発射間隔の調整
             m_shotTimer += Time.deltaTime;
-            if (m_shotTimer < m_shotInterval) return;
+            if (m_shotTimer < m_shotInterval*textSize) return;
             m_shotTimer = 0;
 
 
@@ -148,5 +157,33 @@ public class Player : MonoBehaviour
             }
         }
         TextManager.Operation(opeCode);
+    }
+
+    public void AddInventory(List<MyText> list)
+    {
+        string str = "";
+        int i;
+        inventory.Add(list);
+        for (i = 0; i < list.Count; i++)
+        {
+            str += list[i].GetComponent<TextMesh>().text;
+        }
+        main_p.SetInventory(str);
+    }
+
+    public void RemoveInventory(int id)
+    {
+        //inventory.RemoveAt(id);
+        main_p.PickInventory(id);        
+    }
+
+    //文字を取り出す
+    public void PickText()
+    {
+        //文字を見えるようにする
+
+        //文字の位置修正
+
+        //インベントリから削除
     }
 }

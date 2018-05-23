@@ -57,6 +57,8 @@ public class Arm : MonoBehaviour
                     i.gameObject.SetActive(false);
                     i.transform.parent.parent = null;
                 }
+                if (Player.p.inventory.Count < 8) Player.p.inventory.Add(myTexts);
+                else Debug.Log("capacity over!");
                 myTexts.Clear();
             }
         }

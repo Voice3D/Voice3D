@@ -31,7 +31,7 @@ public class MyText : MonoBehaviour {
             transform.parent.LookAt(new Vector3(0, transform.parent.position.y, 0));
             transform.parent.Rotate(new Vector3(0, 180, 0));
             TextManager.tm.PosiText(m_id, m_size);
-            float ps = (float)TextManager.tm.m_top;
+            float ps = (float)TextManager.tm.m_top-TextManager.tm.heightPL*(m_size-1);
             Vector3 temp = transform.parent.localPosition;
             temp.y = ps;
             transform.parent.localPosition = temp;
@@ -45,6 +45,7 @@ public class MyText : MonoBehaviour {
         m_velocity = direction * speed;
         transform.localPosition = new Vector3(0, 0.75f, 0);
         transform.localEulerAngles = Vector3.zero;
+        transform.localScale *= size;
 
         m_id = i;
         GetComponent<TextMesh>().text = c;

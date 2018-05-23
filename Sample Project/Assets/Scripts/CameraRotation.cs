@@ -7,8 +7,7 @@ public class CameraRotation : MonoBehaviour {// カメラの向きを制御
     public Controller player;
     private float ud_deg=0, rl_deg=0;
 	// Use this for initialization
-	void Start () {
-		
+	void Start () {		
 	}
 	
 	// Update is called once per frame

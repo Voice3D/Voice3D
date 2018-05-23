@@ -8,6 +8,7 @@ public class TextManager : MonoBehaviour {
     public static bool textStop = false;
     public static TextManager tm;
     public int m_top, m_bottom, m_dev;//文字列が周回する領域の、一番高いところ、低いところ、何列に分けるか
+    public float heightPL;//一列当たりの高さ
     public static Dictionary<int, List<MyText>> strs = new Dictionary<int, List<MyText>>();//空間に存在する文字列を格納
     public static List<List<MyText>> LineManager = new List<List<MyText>>();//外側周回中の文字列を格納（indexが小さい方が上）
 
@@ -19,6 +20,7 @@ public class TextManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        heightPL = (m_top - m_bottom) / m_dev;
     }
 
 	// Update is called once per frame
@@ -36,7 +38,7 @@ public class TextManager : MonoBehaviour {
             {
                 for (int j = 0; j < LineManager[i].Count; j++)
                 {
-                    LineManager[i][j].GetComponent<MyText>().transform.parent.position -= new Vector3(0, (m_top - m_bottom) / m_dev*t_size, 0);
+                    LineManager[i][j].GetComponent<MyText>().transform.parent.position -= new Vector3(0, heightPL*t_size, 0);
                 }
             }
             if (LineManager.Count == m_dev)
@@ -50,8 +52,7 @@ public class TextManager : MonoBehaviour {
                 temp.Clear();
             }
             if (LineManager.Count != 0) LineManager.Insert(0, strs[t_id]);
-            else LineManager.Add(strs[t_id]);
-            
+            else LineManager.Add(strs[t_id]);            
         }
         return;
     }
