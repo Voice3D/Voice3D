@@ -14,6 +14,7 @@ public class Controller : MonoBehaviour
     //Planeに触れているか判定するため
     private bool ground=false;
     private Vector3 prePosi;
+    private bool menu = false;
     int sign;
     Vector3 angle;
 
@@ -28,6 +29,12 @@ public class Controller : MonoBehaviour
     void Update()
     {
         rb.angularVelocity = new Vector3(0,0,0);
+
+        //表示、非表示の変更
+        if (Input.GetButtonDown("Menu")) menu = !menu;
+        transform.GetChild(1).gameObject.SetActive(menu);
+        transform.GetChild(0).gameObject.SetActive(!menu);
+
         //地面に触れている場合発動
         if (ground)
         {

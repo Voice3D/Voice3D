@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     private List<MyText> texts;
     private bool triggerOn = false;
     private int m_mode = 0;
-    private int textSize;
+    private int textSize = 1;
     private string[] keywords = { "ストップ", "スタート" };
 
     public LayerMask mask;
@@ -50,19 +50,17 @@ public class Player : MonoBehaviour
         */
         // 他のクラスからプレイヤーを参照できるように
         // static 変数にインスタンス情報を格納する
-        p = this;
-        
+        p = this;        
+    }
+
+    private void Start()
+    {
+        inventory = new List<List<MyText>>();
     }
 
     // 毎フレーム呼び出される関数
     private void Update()
     {
-        //表示、非表示の変更
-        if (Input.GetButtonDown("Menu")) menu = !menu;
-        menu_p.gameObject.SetActive(menu);
-        transform.GetChild(1).gameObject.SetActive(!menu);
-
-
         //照準の向き、及びアーム発射制御
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -115,7 +113,6 @@ public class Player : MonoBehaviour
         }
         waitS = s;
         counter = waitS.Length;
-        textSize = 1;
         if (counter > MaxLength)
         {
             Debug.Log("erorr:Too Long");
@@ -173,7 +170,7 @@ public class Player : MonoBehaviour
 
     public void RemoveInventory(int id)
     {
-        //inventory.RemoveAt(id);
+        inventory.RemoveAt(id);
         main_p.PickInventory(id);        
     }
 

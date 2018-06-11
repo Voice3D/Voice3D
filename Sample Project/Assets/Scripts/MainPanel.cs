@@ -41,7 +41,6 @@ public class MainPanel : MonoBehaviour {
                 transform.GetChild(choiceLine+2).GetComponent<TextMesh>().text;
             mp.transform.GetChild(1).GetComponent<ActionPanel>().invId = choiceLine;
         }
-
     }
 
     //インベントリの追加
