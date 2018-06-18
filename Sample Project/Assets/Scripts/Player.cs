@@ -175,12 +175,24 @@ public class Player : MonoBehaviour
     }
 
     //文字を取り出す
-    public void PickText()
+    public void PickText(int id)
     {
+        List<MyText> temp = inventory[id];
+        Vector3 basePos = transform.parent.position + 2*transform.parent.forward;
+        basePos.y += 1.5f;
         //文字を見えるようにする
-
         //文字の位置修正
+        for (int i=0;i<temp.Count;i++)
+        {
+            temp[i].gameObject.SetActive(true);
+            temp[i].transform.position = new Vector3(basePos.x+i, basePos.y, basePos.z);
+            temp[i].transform.rotation = transform.parent.rotation;
+            temp[i].rotation = false;
+            temp[i].GetComponent<BoxCollider>().isTrigger = false;
+        }
 
         //インベントリから削除
+        inventory.RemoveAt(id);
+        main_p.PickInventory(id);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainPanel : MonoBehaviour {
     private int choiceLine;
-    private int nextLine = 8;
+    private int nextLine = 2;
     private int panelNum = 0;
     private float preUd = 0;
     private bool move = false;
@@ -46,6 +46,7 @@ public class MainPanel : MonoBehaviour {
     //インベントリの追加
     public void SetInventory(string str)
     {
+        Debug.Log(nextLine);
         transform.GetChild(nextLine).GetComponent<TextMesh>().text = str;
         nextLine++;
     }

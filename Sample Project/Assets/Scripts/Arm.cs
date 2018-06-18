@@ -50,16 +50,19 @@ public class Arm : MonoBehaviour
             {
                 have = 0;
                 armStop = 1;
-                var count = myTexts.Count;
-                Debug.Log(count);
-                foreach(MyText i in myTexts)
+                //var count = myTexts.Count;
+                //Debug.Log("count"+count);
+                if (myTexts.Count != 0)
                 {
-                    i.gameObject.SetActive(false);
-                    i.transform.parent.parent = null;
+                    foreach (MyText i in myTexts)
+                    {
+                        i.gameObject.SetActive(false);
+                        i.transform.parent.parent = null;
+                    }
+                    if (Player.p.inventory.Count < 8) Player.p.AddInventory(myTexts);
+                    else Debug.Log("capacity over!");
+                    myTexts = new List<MyText>();
                 }
-                if (Player.p.inventory.Count < 8) Player.p.inventory.Add(myTexts);
-                else Debug.Log("capacity over!");
-                myTexts.Clear();
             }
         }
     }

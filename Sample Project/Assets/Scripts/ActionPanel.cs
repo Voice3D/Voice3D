@@ -35,7 +35,7 @@ public class ActionPanel : MonoBehaviour {
         }
 
         //画面バック
-        if (Input.GetButtonDown("Back")) Debug.Log("back");
+        //if (Input.GetButtonDown("Back")) Debug.Log("back");
         if (Input.GetButtonDown("Back")) mp.PanelChange(0);
 
         //決定時の操作
@@ -44,7 +44,7 @@ public class ActionPanel : MonoBehaviour {
             switch (choiceLine)
             {
                 case 0://取り出す
-                    Player.p.PickText();
+                    Player.p.PickText(invId);
                     mp.PanelChange(-1);
                     break;
                 case 1://削除
