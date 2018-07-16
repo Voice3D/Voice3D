@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Arm : NetworkBehaviour
+public class Arm : MonoBehaviour
 {
     private List<MyText> myTexts = new List<MyText>();
     private int armStop = 1;
@@ -29,16 +29,16 @@ public class Arm : NetworkBehaviour
         if (armStop != 2 && Input.GetAxis("Rtrigger") == 1)
         {
             armStop = 0;
-            transform.position += transform.parent.forward * speed;
+            transform.localPosition += transform.parent.forward * speed;
         }
         if (armStop != 1 && Input.GetAxis("Rtrigger") == 0)
         {
             armStop = 0;
-            transform.position -= transform.parent.forward * speed;
+            transform.localPosition -= transform.parent.forward * speed;
         }
         if (armStop == 2 && Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) > m_cylR+0.5)
         {
-            transform.position -= transform.parent.forward * speed;
+            transform.localPosition -= transform.parent.forward * speed;
         }
 
         if (armStop==0)

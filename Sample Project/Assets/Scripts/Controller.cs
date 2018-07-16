@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Controller : MonoBehaviour
+public class Controller : NetworkBehaviour
 {
     Rigidbody rb;
     //移動スピード
@@ -15,8 +16,14 @@ public class Controller : MonoBehaviour
     private bool ground=false;
     private Vector3 prePosi;
     private bool menu = false;
+
+    [SyncVar]
+    private string text;
+    private Pivot pivot;
     int sign;
     Vector3 angle;
+
+    public Pivot m_prefab;
 
     public bool ikActive = false;
     public Transform bodyObj = null;
@@ -223,5 +230,26 @@ public class Controller : MonoBehaviour
                 }
             }
         }
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        Camera.main.GetComponent<CameraRotation>().player = GetComponent<Controller>();
+    }
+
+    public MyText GenText(Pivot prefab, Vector3 pos, Quaternion rot, int i, char c, int textSize)
+    {
+        Debug.Log("gen text");
+        CmdGenText(pos, rot, i, c, textSize);
+        return null;//pivot.transform.GetChild(0).GetComponent<MyText>();
+    }
+
+    [Command]
+    public void CmdGenText(Vector3 pos, Quaternion rot, int i, char c, int textSize)
+    {
+        Debug.Log("ser");
+        pivot = Instantiate(m_prefab, pos, rot);
+        pivot.transform.GetChild(0).GetComponent<MyText>().Init(i, speed, c.ToString(), textSize);
+        NetworkServer.Spawn(pivot.gameObject);
     }
 }

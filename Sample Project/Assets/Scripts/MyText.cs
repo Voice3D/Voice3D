@@ -43,7 +43,7 @@ public class MyText : MonoBehaviour {
         var direction = transform.parent.forward;
         m_size = size;
         m_velocity = direction * speed;
-        transform.localPosition = new Vector3(0, 0.75f, 0);
+        //transform.localPosition = new Vector3(0, 0.75f, 0);
         transform.localEulerAngles = Vector3.zero;
         transform.localScale *= size;
 

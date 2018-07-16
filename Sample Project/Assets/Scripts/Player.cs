@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 
 // 文字発射デバイスを制御するコンポーネント
-public class Player : NetworkBehaviour
+public class Player : MonoBehaviour
 {
     public static Player p;
     public MyText m_textPrefab; // 弾のプレハブ
@@ -98,6 +98,7 @@ public class Player : NetworkBehaviour
 
             // テキストを発射する
             ShootText(strCount, m_shotSpeed, waitS[waitS.Length-counter]);
+            Debug.Log("check");
             counter--;
             if (counter == 0)
             {
@@ -110,6 +111,7 @@ public class Player : NetworkBehaviour
 
     public void ThrowText(string s)//テキスト発射要請
     {
+        Debug.Log("throw text: "+waiter + ", "+ TextManager.textStop);
         if (waiter || TextManager.textStop) return;//テキスト発射中もしくは文字の回転が停止中の場合は文字を発射しない
         if (m_mode == 1)//音声コマンド
         {
@@ -132,14 +134,17 @@ public class Player : NetworkBehaviour
 
     private void ShootText(int i, float speed, char c)//テキスト発射
     {
+        Debug.Log("shoot text");
         var pos = shot_pos; // プレイヤーの位置
         var rot = shot_rot; // プレイヤーの向き
 
-        var pivot = Instantiate(m_pivotPrefab, pos, rot);
-        var text = Instantiate(m_textPrefab, pos, rot);
-        text.transform.parent = pivot.transform;
-        text.Init(i, speed, c.ToString(), textSize);
-        texts.Add(text);        
+        //var pivot = Instantiate(m_pivotPrefab, pos, rot);
+        //NetworkServer.Spawn(pivot.gameObject);
+        var text = transform.parent.GetComponent<Controller>().GenText(m_pivotPrefab, pos, rot, i, c, textSize);
+        //NetworkServer.Spawn(text.gameObject);
+        //text.transform.parent = pivot.transform;
+        //text.Init(i, speed, c.ToString(), textSize);
+        //texts.Add(text);        
     }
 
     public int GetMode()//モード取得
@@ -201,7 +206,6 @@ public class Player : NetworkBehaviour
         main_p.PickInventory(id);
     }
 
-    [ClientRpc]
     private void RpcRecog(bool flag)
     {
         if (flag) m_vr.StartRecognition();
