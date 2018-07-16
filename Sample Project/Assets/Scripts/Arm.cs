@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Arm : MonoBehaviour
+public class Arm : NetworkBehaviour
 {
     private List<MyText> myTexts = new List<MyText>();
     private int armStop = 1;

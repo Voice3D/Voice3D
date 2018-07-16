@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 // 文字発射デバイスを制御するコンポーネント
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     public static Player p;
     public MyText m_textPrefab; // 弾のプレハブ
@@ -56,29 +57,33 @@ public class Player : MonoBehaviour
     private void Start()
     {
         inventory = new List<List<MyText>>();
+        Hud.instance.m_player = this;
+        m_vr = VoiceRecognition.instance;
     }
 
     // 毎フレーム呼び出される関数
     private void Update()
     {
         //照準の向き、及びアーム発射制御
+        /*
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 30))
         {
             transform.LookAt(hit.point);
         }
+        */
 
         //音声認識の開始、停止、モードの制御
         if (!triggerOn && Input.GetAxis("Ltrigger") == 1)
         {
             triggerOn = true;
-            m_vr.StartRecognition();
+            RpcRecog(true);
         }
         if (triggerOn && Input.GetAxis("Ltrigger") == 0)
         {
             triggerOn = false;
-            m_vr.StopRecognition();
+            RpcRecog(false);
         }
         if (!triggerOn && Input.GetButtonDown("change")) m_mode = (m_mode + 1) % keywords.Length;
 
@@ -194,5 +199,12 @@ public class Player : MonoBehaviour
         //インベントリから削除
         inventory.RemoveAt(id);
         main_p.PickInventory(id);
+    }
+
+    [ClientRpc]
+    private void RpcRecog(bool flag)
+    {
+        if (flag) m_vr.StartRecognition();
+        else m_vr.StopRecognition();
     }
 }

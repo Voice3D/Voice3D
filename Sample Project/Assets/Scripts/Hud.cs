@@ -4,10 +4,15 @@ using UnityEngine.UI;
 // 情報表示用の UI を制御するコンポーネント
 public class Hud : MonoBehaviour
 {
+    public static Hud instance;
     public Text m_Mode;
     public Text m_Trigger;
     public Player m_player;
- 
+
+    private void Start()
+    {
+        instance = this;
+    }
 
     // 毎フレーム呼び出される関数
     private void Update()

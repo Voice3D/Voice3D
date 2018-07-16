@@ -43,10 +43,12 @@ public class Controller : MonoBehaviour
 
     void Start()
     {
+        transform.position = Vector3.zero;
         rb = GetComponent<Rigidbody>();
         //UnityちゃんのAnimatorにアクセスする
         animator = GetComponent<Animator>();
         prePosi = transform.position;
+        //Camera.main.GetComponent<CameraRotation>().player = this;
     }
 
     void Update()

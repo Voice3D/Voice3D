@@ -28,5 +28,13 @@ public class CameraRotation : MonoBehaviour {// カメラの向きを制御
         player.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         rl_deg += dx * rate;
         player.transform.GetChild(0).localEulerAngles = new Vector3(transform.localEulerAngles.x, 0, transform.localEulerAngles.z);
-    }
+        if (Input.GetButtonDown("Lbutton")) {
+            var angle = -rl_deg;
+            transform.RotateAround(p_posi, Vector3.up, angle);
+            transform.RotateAround(p_posi, Vector3.right, -ud_deg);
+            transform.RotateAround(p_posi, Vector3.up, -angle);
+            ud_deg = 0;
+            transform.position = player.transform.position - 4 * player.transform.forward + new Vector3(0, 1.5f, 0);        
+        }
+    }   
 }
