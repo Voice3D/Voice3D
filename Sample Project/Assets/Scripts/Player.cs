@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         */
         // 他のクラスからプレイヤーを参照できるように
         // static 変数にインスタンス情報を格納する
-        p = this;        
+        //p = this;        
     }
 
     private void Start()
@@ -90,10 +90,12 @@ public class Player : MonoBehaviour
         //テキスト発射制御
         if (waiter)
         {
+            Debug.Log("waiter");
             //テキスト発射間隔の調整
             m_shotTimer += Time.deltaTime;
             if (m_shotTimer < m_shotInterval*textSize) return;
             m_shotTimer = 0;
+            Debug.Log("mark");
 
 
             // テキストを発射する

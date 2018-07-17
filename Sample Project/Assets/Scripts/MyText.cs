@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MyText : MonoBehaviour {
-    private Vector3 m_velocity; // 速度
+    public Vector3 m_velocity; // 速度
     public bool m_on_rail;
     public bool m_stop;
     public int m_cylR;
@@ -38,7 +38,7 @@ public class MyText : MonoBehaviour {
         }
     }
 
-    public void Init(int i, float speed, string c, int size)//文字生成時の初期化
+    public MyText Init(int i, float speed, string c, int size)//文字生成時の初期化
     {
         var direction = transform.parent.forward;
         m_size = size;
@@ -49,5 +49,6 @@ public class MyText : MonoBehaviour {
 
         m_id = i;
         GetComponent<TextMesh>().text = c;
+        return this;
     }
 }

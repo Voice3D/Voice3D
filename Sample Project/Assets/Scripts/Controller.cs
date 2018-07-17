@@ -235,6 +235,7 @@ public class Controller : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         Camera.main.GetComponent<CameraRotation>().player = GetComponent<Controller>();
+        Player.p = transform.GetChild(0).GetComponent<Player>();
     }
 
     public MyText GenText(Pivot prefab, Vector3 pos, Quaternion rot, int i, char c, int textSize)
@@ -249,7 +250,16 @@ public class Controller : NetworkBehaviour
     {
         Debug.Log("ser");
         pivot = Instantiate(m_prefab, pos, rot);
-        pivot.transform.GetChild(0).GetComponent<MyText>().Init(i, speed, c.ToString(), textSize);
+        var text = pivot.transform.GetChild(0).GetComponent<MyText>();
+        var direction = pivot.transform.forward;
+        text.m_size = textSize;
+        text.m_velocity = direction * speed;
+        //transform.localPosition = new Vector3(0, 0.75f, 0);
+        transform.localEulerAngles = Vector3.zero;
+        transform.localScale *= textSize;
+        text.m_id = i;
+        text.GetComponent<TextMesh>().text = c.ToString();
+        Debug.Log(text.m_id+", "+text.m_size);
         NetworkServer.Spawn(pivot.gameObject);
     }
 }
