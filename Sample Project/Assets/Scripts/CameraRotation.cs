@@ -12,9 +12,13 @@ public class CameraRotation : MonoBehaviour {// カメラの向きを制御
 	
 	// Update is called once per frame
 	void Update () {
-        float dx = Input.GetAxisRaw("Camera_x");
-        float dy = Input.GetAxisRaw("Camera_y");
-        
+        //float dx = Input.GetAxisRaw("Camera_x");
+        //float dy = Input.GetAxisRaw("Camera_y");
+
+        Vector2 posi = TouchpadExmpleright.position;
+        float dx = posi.x;
+        float dy = posi.y;
+
         Vector3 p_posi = player.transform.localPosition;
         if (!((-45  > ud_deg && dy < 0) || (ud_deg > 45 && dy > 0)) && dy!=0)
         {

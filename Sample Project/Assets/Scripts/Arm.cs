@@ -14,8 +14,12 @@ public class Arm : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //vive版Rtrigger
+        bool rightflag = TouchpadExmpleright.trigger_flag;
+
+
         //選択した文字の回収
-        if (have == 1 && Input.GetAxis("Rtrigger") == 0)
+        if (have == 1 && ((Input.GetAxis("Rtrigger") == 0)||(!rightflag)))
         {
             have = 2;
             foreach (MyText i in myTexts)
@@ -25,12 +29,12 @@ public class Arm : MonoBehaviour
         }
         // 移動する
         if (armStop == 2 && (Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) < m_cylR)) armStop = 0;        
-        if (armStop != 2 && Input.GetAxis("Rtrigger") == 1)
+        if (armStop != 2 && ((Input.GetAxis("Rtrigger") == 1)||(rightflag)))
         {
             armStop = 0;
             transform.position += transform.parent.forward * speed;
         }
-        if (armStop != 1 && Input.GetAxis("Rtrigger") == 0)
+        if (armStop != 1 && ((Input.GetAxis("Rtrigger") == 0)||(!rightflag)))
         {
             armStop = 0;
             transform.position -= transform.parent.forward * speed;
@@ -46,7 +50,7 @@ public class Arm : MonoBehaviour
             {
                 armStop = 2;
             }
-            else if (Vector3.Distance(transform.localPosition, new Vector3(0, transform.localPosition.y, 0)) < 0.5)
+            else if (Vector3.Distance(transform.localPosition, new Vector3(0, transform.localPosition.y, 1)) < 0.5)
             {
                 have = 0;
                 armStop = 1;
@@ -70,7 +74,7 @@ public class Arm : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         //文字を選択状態にする
-        if (other.gameObject.tag == "Text" && Input.GetButtonDown("Fire1") && have != 2 && TextManager.textStop)
+        if (other.gameObject.tag == "Text" && Input.GetButtonDown("Fire1")&& have != 2 && TextManager.textStop)
         {
             other.gameObject.GetComponent<MyText>().rotation = true;
             myTexts.Add(other.gameObject.GetComponent<MyText>());

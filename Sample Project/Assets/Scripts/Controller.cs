@@ -62,9 +62,16 @@ public class Controller : MonoBehaviour
         if (ground)
         {
             //ユニティちゃんの移動
-            float dx = Input.GetAxisRaw("Horizontal");
-            float dy = Input.GetAxisRaw("Vertical");
-           
+            //float dx = Input.GetAxisRaw("Horizontal");
+            //float dy = Input.GetAxisRaw("Vertical");
+
+            //viveコントローラー用
+            Vector2 posi = TouchpadExmpleleft.position;
+            float dx = posi.x;
+            float dy = posi.y;
+
+
+
             if (Mathf.Abs(dx)<0.3 && Mathf.Abs(dy)<0.3)
             {
                 //何もキーを押していない時はアニメーションをオフにする
@@ -82,7 +89,7 @@ public class Controller : MonoBehaviour
                 transform.localEulerAngles = new Vector3(0, angle.y, 0);
                 animator.SetBool("Running", true);
             }
-            Camera.main.transform.position += transform.position - prePosi;
+            Camera.main.transform.parent.transform.position += transform.position - prePosi;
             //スペースキーでジャンプする
             /*
             if (Input.GetButtonDown("Jump"))
@@ -99,6 +106,7 @@ public class Controller : MonoBehaviour
             */
         }
         prePosi = transform.position;
+        
     }
 
     void OnCollisionStay(Collision col)//ジャンプをもし実装するなら使うかも
