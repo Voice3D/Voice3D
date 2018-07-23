@@ -16,9 +16,8 @@ public class Controller : NetworkBehaviour
     private bool ground=false;
     private Vector3 prePosi;
     private bool menu = false;
+    private short setTextNo = MsgType.Highest+1;
 
-    [SyncVar]
-    private string text;
     private Pivot pivot;
     int sign;
     Vector3 angle;
@@ -238,28 +237,11 @@ public class Controller : NetworkBehaviour
         Player.p = transform.GetChild(0).GetComponent<Player>();
     }
 
-    public MyText GenText(Pivot prefab, Vector3 pos, Quaternion rot, int i, char c, int textSize)
-    {
-        Debug.Log("gen text");
-        CmdGenText(pos, rot, i, c, textSize);
-        return null;//pivot.transform.GetChild(0).GetComponent<MyText>();
-    }
-
     [Command]
     public void CmdGenText(Vector3 pos, Quaternion rot, int i, char c, int textSize)
     {
-        Debug.Log("ser");
         pivot = Instantiate(m_prefab, pos, rot);
-        var text = pivot.transform.GetChild(0).GetComponent<MyText>();
-        var direction = pivot.transform.forward;
-        text.m_size = textSize;
-        text.m_velocity = direction * speed;
-        //transform.localPosition = new Vector3(0, 0.75f, 0);
-        transform.localEulerAngles = Vector3.zero;
-        transform.localScale *= textSize;
-        text.m_id = i;
-        text.GetComponent<TextMesh>().text = c.ToString();
-        Debug.Log(text.m_id+", "+text.m_size);
         NetworkServer.Spawn(pivot.gameObject);
+        pivot.RpcSetText(i, c, textSize);
     }
 }
