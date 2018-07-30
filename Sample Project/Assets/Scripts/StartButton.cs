@@ -2,7 +2,7 @@
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class StartButton : NetworkManager
+public class StartButton : NetworkBehaviour
 {
     public InputField hostIp;
     public GameObject error;
@@ -18,8 +18,6 @@ public class StartButton : NetworkManager
     // Use this for initialization
     void Start()
     {
-        NetworkManager.singleton.networkPort = 7777;
-        NetworkManager.singleton.onlineScene = "GameScene";
         colors.normalColor = Color.blue;
         Lbutton.colors = colors;
         Rbutton.colors = ColorBlock.defaultColorBlock;

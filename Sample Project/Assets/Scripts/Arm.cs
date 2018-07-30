@@ -29,16 +29,16 @@ public class Arm : MonoBehaviour
         if (armStop != 2 && Input.GetAxis("Rtrigger") == 1)
         {
             armStop = 0;
-            transform.localPosition += transform.parent.forward * speed;
+            transform.position += transform.parent.forward * speed;
         }
         if (armStop != 1 && Input.GetAxis("Rtrigger") == 0)
         {
             armStop = 0;
-            transform.localPosition -= transform.parent.forward * speed;
+            transform.position -= transform.parent.forward * speed;
         }
         if (armStop == 2 && Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) > m_cylR+0.5)
         {
-            transform.localPosition -= transform.parent.forward * speed;
+            transform.position -= transform.parent.forward * speed;
         }
 
         if (armStop==0)
@@ -57,7 +57,7 @@ public class Arm : MonoBehaviour
                 {
                     foreach (MyText i in myTexts)
                     {
-                        i.gameObject.SetActive(false);
+                        i.transform.parent.GetComponent<Pivot>().CmdSa(false);
                         i.transform.parent.parent = null;
                     }
                     if (Player.p.inventory.Count < 8) Player.p.AddInventory(myTexts);
@@ -71,9 +71,11 @@ public class Arm : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         //文字を選択状態にする
-        if (other.gameObject.tag == "Text" && Input.GetButtonDown("Fire1") && have != 2 && TextManager.textStop)
+        if (other.gameObject.tag == "Text" && Input.GetButtonDown("Fire1") && have != 2)
         {
-            other.gameObject.GetComponent<MyText>().rotation = true;
+            var pivot = other.transform.parent.GetComponent<Pivot>();
+            if (pivot.rotation || !pivot.m_stop) return;
+            pivot.rotation = true;
             myTexts.Add(other.gameObject.GetComponent<MyText>());
             have = 1;
         }

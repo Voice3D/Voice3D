@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public float m_shotTimer;
     public float m_shotInterval;
     public int MaxLength;
-    public int maxStrs;
+    //public int maxStrs;
     public List<List<MyText>> inventory;
     public bool menu = false;
 
@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     private int strCount=0;
     private Vector3 shot_pos;
     private Quaternion shot_rot;
-    private List<MyText> texts = new List<MyText>();
+    //private List<MyText> texts = new List<MyText>();
     private bool triggerOn = false;
     private int m_mode = 0;
     private int textSize = 1;
@@ -51,12 +51,12 @@ public class Player : MonoBehaviour
         if (!triggerOn && Input.GetAxis("Ltrigger") == 1)
         {
             triggerOn = true;
-            RpcRecog(true);
+            transform.parent.GetComponent<Controller>().VrOp(true);
         }
         if (triggerOn && Input.GetAxis("Ltrigger") == 0)
         {
             triggerOn = false;
-            RpcRecog(false);
+            transform.parent.GetComponent<Controller>().VrOp(false);
         }
         if (!triggerOn && Input.GetButtonDown("change")) m_mode = (m_mode + 1) % keywords.Length;
 
@@ -78,8 +78,8 @@ public class Player : MonoBehaviour
             if (counter == 0)
             {
                 waiter = false;
-                TextManager.strs.Add(strCount, texts);
-                strCount = (strCount + 1) % maxStrs;  
+                //TextManager.strs.Add(strCount, texts);
+                strCount++;  
             }
         }
     }
@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
         m_shotTimer = m_shotInterval;
         shot_pos = transform.position;
         shot_rot = transform.rotation;
-        texts = new List<MyText>();
+        //texts = new List<MyText>();
     }
 
     private void ShootText(int i, float speed, char c)//テキスト発射
@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
                 break;
             }
         }
-        TextManager.Operation(opeCode);
+        TextManager.tm.Operation(opeCode);
     }
 
     public void AddInventory(List<MyText> list)
@@ -165,10 +165,10 @@ public class Player : MonoBehaviour
         //文字の位置修正
         for (int i=0;i<temp.Count;i++)
         {
-            temp[i].gameObject.SetActive(true);
+            temp[i].transform.parent.GetComponent<Pivot>().CmdSa(true);
             temp[i].transform.position = new Vector3(basePos.x+i, basePos.y, basePos.z);
             temp[i].transform.rotation = transform.parent.rotation;
-            temp[i].rotation = false;
+            temp[i].transform.parent.GetComponent<Pivot>().rotation = false;
             temp[i].GetComponent<BoxCollider>().isTrigger = false;
         }
 
@@ -177,12 +177,12 @@ public class Player : MonoBehaviour
         main_p.PickInventory(id);
     }
 
-    private void RpcRecog(bool flag)
+    public void Recog(bool flag)
     {
         if (flag) m_vr.StartRecognition();
         else m_vr.StopRecognition();
     }
-
+    /*
     public void AddTexts(MyText mt)
     {
         texts.Add(mt);
@@ -190,7 +190,8 @@ public class Player : MonoBehaviour
 
     public void ResetTexts(int count)
     {
-        TextManager.strs.Add(count, texts);
+        //TextManager.strs.Add(count, texts);
         texts = new List<MyText>();
     }
+    */
 }

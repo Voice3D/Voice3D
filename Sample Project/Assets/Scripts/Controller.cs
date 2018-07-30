@@ -46,6 +46,9 @@ public class Controller : NetworkBehaviour
 
     public float lookAtWeight = 1.0f;
 
+    [SyncVar]
+    public bool textStop = false;
+
 
     void Start()
     {
@@ -116,7 +119,6 @@ public class Controller : NetworkBehaviour
 
     void OnGUI()
     {
-
         GUILayout.Label("Activate IK and move the Effectors around in Scene View");
         ikActive = GUILayout.Toggle(ikActive, "Activate IK");
     }
@@ -243,5 +245,11 @@ public class Controller : NetworkBehaviour
         pivot = Instantiate(m_prefab, pos, rot);
         NetworkServer.Spawn(pivot.gameObject);
         pivot.RpcSetText(i, c, textSize);
+    }
+
+    [Client]
+    public void VrOp(bool flag)
+    {
+        Player.p.Recog(flag);
     }
 }

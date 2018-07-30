@@ -170,6 +170,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e769b534195b24193866ed9467eb12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_velocity: {x: 0, y: 0, z: 0}
+  m_on_rail: 0
+  m_stop: 0
+  m_cylR: 10
+  m_rotSpeed: 10
+  rotation: 0
 --- !u!114 &114269800116644438
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -181,14 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea88c0e7f9dbf7e4eba68c8facf5dce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_velocity: {x: 0, y: 0, z: 0}
-  m_on_rail: 0
-  m_stop: 0
-  m_cylR: 10
   m_id: 0
   m_size: 0
-  m_rotSpeed: 10
-  rotation: 0
 --- !u!114 &114372989801538488
 MonoBehaviour:
   m_ObjectHideFlags: 1
