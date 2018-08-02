@@ -31,7 +31,7 @@ public class InputManager : MonoBehaviour
                     opeCode = 1;
                     break;
             }
-            TextManager.Operation(opeCode);
+            TextManager.tm.Operation(opeCode);
         }
         else Player.p.ThrowText(inputValue);
 

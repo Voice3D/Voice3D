@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Controller : MonoBehaviour
+public class Controller : NetworkBehaviour
 {
     Rigidbody rb;
     //移動スピード
@@ -15,8 +16,17 @@ public class Controller : MonoBehaviour
     private bool ground=false;
     private Vector3 prePosi;
     private bool menu = false;
+    private float deg=6;
+    private bool rotFlag = false;
+    //private short setTextNo = MsgType.Highest+1;
+    [SerializeField]
+    private GameObject[] models;
+
+    private Pivot pivot;
     int sign;
     Vector3 angle;
+
+    public Pivot m_prefab;
 
     public bool ikActive = false;
     public Transform bodyObj = null;
@@ -40,13 +50,23 @@ public class Controller : MonoBehaviour
 
     public float lookAtWeight = 1.0f;
 
+    public static Controller uc;
+
+    [SerializeField]
+    private GameObject player, menuPan, light;
+
+    [SyncVar]
+    public bool textStop = false;
+
 
     void Start()
     {
+        transform.position = new Vector3(0, 1, 0);
         rb = GetComponent<Rigidbody>();
         //UnityちゃんのAnimatorにアクセスする
         animator = GetComponent<Animator>();
         prePosi = transform.position;
+        //Camera.main.GetComponent<CameraRotation>().player = this;
     }
 
     void Update()
@@ -55,50 +75,63 @@ public class Controller : MonoBehaviour
 
         //表示、非表示の変更
         if (Input.GetButtonDown("Menu")) menu = !menu;
-        transform.GetChild(1).gameObject.SetActive(menu);
-        transform.GetChild(0).gameObject.SetActive(!menu);
+        menuPan.SetActive(menu);
+        player.SetActive(!menu);
+        light.SetActive(!menu);
 
         //地面に触れている場合発動
         if (ground)
         {
             //ユニティちゃんの移動
-            float dx = Input.GetAxisRaw("Horizontal");
-            float dy = Input.GetAxisRaw("Vertical");
+            var posi = TouchpadExmpleleft.position;
+            float dx = posi.x;
+            float dy = posi.y;
+            Debug.Log("xy: "+dx+", "+dy);
            
-            if (Mathf.Abs(dx)<0.3 && Mathf.Abs(dy)<0.3)
+            if (Mathf.Abs(dx)<0.1 && Mathf.Abs(dy)<0.1)
             {
                 //何もキーを押していない時はアニメーションをオフにする
+                Debug.Log("stop");
                 rb.velocity = new Vector3(0, 0, 0);
                 animator.SetBool("Running", false);
             }
             else
             {
-                if (dy < 0) sign = -1;
+                if (dx < 0) sign = -1;
                 else sign = 1;
-                angle = Camera.main.transform.eulerAngles;
-                float dir = angle.y - Vector3.Angle(Vector3.right, new Vector3(dx, 0, dy))*sign+90;
-                transform.localEulerAngles = new Vector3(0, dir, 0);
+                //angle = Camera.main.transform.eulerAngles;
+                float dir = (Vector3.Angle(Vector3.forward, new Vector3(dx, 0, dy))*sign)%360;
+                transform.eulerAngles += new Vector3(0, dir, 0);
                 rb.velocity = speed * transform.forward;
-                transform.localEulerAngles = new Vector3(0, angle.y, 0);
+                transform.eulerAngles -= new Vector3(0, dir, 0);
                 animator.SetBool("Running", true);
             }
-            Camera.main.transform.position += transform.position - prePosi;
-            //スペースキーでジャンプする
-            /*
-            if (Input.GetButtonDown("Jump"))
-            {               
-                animator.SetBool("Jumping", true);
-                //上方向に向けて力を加える
-                rb.AddForce(new Vector3(0, thrust, 0));
-                ground = false;               
-            }
-            else
+
+            //Camera.main.transform.position += transform.position - prePosi;
+            //Debug.Log("lr: "+ Input.GetAxis("rotL")+", "+ Input.GetAxis("rotR"));              
+
+            if (!rotFlag)
             {
-                animator.SetBool("Jumping", false);
+                if (Input.GetAxis("rotL") > 0.9)
+                {
+                    deg = (deg + 1) % 12;
+                    rotFlag = true;
+                }
+                else if (Input.GetAxis("rotR") > 0.9)
+                {
+                    deg = (deg - 1) % 12;
+                    rotFlag = true;
+                }       
+                transform.eulerAngles = new Vector3(0, deg * 30f-180f, 0);
+                CameraPosi.cp.transform.eulerAngles = new Vector3(0, deg * 30f-180, 0);
             }
-            */
+            else if ((Input.GetAxis("rotR") < 0.9) && (Input.GetAxis("rotL") < 0.9))
+            { rotFlag = false; Debug.Log("rot false"); }
+            
         }
         prePosi = transform.position;
+        Player.p.transform.position = rightHandObj.position;
+        Player.p.transform.rotation = rightHandObj.rotation;
     }
 
     void OnCollisionStay(Collision col)//ジャンプをもし実装するなら使うかも
@@ -108,7 +141,6 @@ public class Controller : MonoBehaviour
 
     void OnGUI()
     {
-
         GUILayout.Label("Activate IK and move the Effectors around in Scene View");
         ikActive = GUILayout.Toggle(ikActive, "Activate IK");
     }
@@ -221,5 +253,32 @@ public class Controller : MonoBehaviour
                 }
             }
         }
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        //Camera.main.GetComponent<CameraRotation>().player = GetComponent<Controller>();
+        Player.p = transform.GetChild(0).GetComponent<Player>();
+        Controller.uc = this;
+        CameraPosi.cp.setObj();
+        //transform.position = new Vector3(0, 1, 0);
+        
+        for (int i = 0; i < models.Length; i++)
+            models[i].SetActive(false);
+            
+    }
+
+    [Command]
+    public void CmdGenText(Vector3 pos, Quaternion rot, int i, char c, int textSize)
+    {
+        pivot = Instantiate(m_prefab, pos, rot);
+        NetworkServer.Spawn(pivot.gameObject);
+        pivot.RpcSetText(i, c, textSize);
+    }
+
+    [Client]
+    public void VrOp(bool flag)
+    {
+        Player.p.Recog(flag);
     }
 }

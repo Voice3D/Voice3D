@@ -20,27 +20,35 @@ public class MainPanel : MonoBehaviour {
     void Update()
     {
         //選択行を変更するか判定
-        var ud = Input.GetAxis("UpDn");
-        if (Mathf.Abs(ud) == 1 && ud != preUd) move = true;
-        else move = false;
-        if (preUd != ud) Debug.Log(ud);
-        preUd = ud;
-
-        //選択行の変更
-        if (move && ((choiceLine != mp.minLine && ud == 1) || (choiceLine != nextLine-1 && ud == -1)))
-        {            
-            transform.GetChild(0).transform.localPosition += new Vector3(0, 0, mp.heightLine * ud);
-            choiceLine -= (int)ud;
-        }
-
-        //決定時の操作
         if (Input.GetButtonDown("Fire1"))
         {
-            mp.PanelChange(1);
-            mp.transform.GetChild(1).GetChild(1).transform.GetComponent<TextMesh>().text =
-                transform.GetChild(choiceLine+2).GetComponent<TextMesh>().text;
-            mp.transform.GetChild(1).GetComponent<ActionPanel>().invId = choiceLine;
-        }
+            var temp = TouchpadExmpleright.position.y;
+            float ud;
+            if (temp > 0.5) ud = 1;
+            else if (temp < -0.5) ud = -1;
+            else ud = 0;
+
+            if (Mathf.Abs(ud) == 1 && ud != preUd) move = true;
+            else move = false;
+            //if (preUd != ud) Debug.Log(ud);
+            preUd = ud;
+
+            //選択行の変更
+            if (move && ((choiceLine != mp.minLine && ud == 1) || (choiceLine != nextLine - 1 && ud == -1)))
+            {
+                transform.GetChild(0).transform.localPosition += new Vector3(0, 0, mp.heightLine * ud);
+                choiceLine -= (int)ud;
+            }
+
+            //決定時の操作
+            if (ud == 0)
+            {
+                mp.PanelChange(1);
+                mp.transform.GetChild(1).GetChild(1).transform.GetComponent<TextMesh>().text =
+                    transform.GetChild(choiceLine + 2).GetComponent<TextMesh>().text;
+                mp.transform.GetChild(1).GetComponent<ActionPanel>().invId = choiceLine;
+            }
+        }    
     }
 
     //インベントリの追加

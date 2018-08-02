@@ -8,9 +8,11 @@ using UnityEngine.Windows.Speech;
 public class VoiceRecognition : MonoBehaviour
 {
     private DictationRecognizer dicRecognizer;
+    public static VoiceRecognition instance;
 
     void Start()
     {
+        instance = this;
         dicRecognizer = new DictationRecognizer();
         dicRecognizer.InitialSilenceTimeoutSeconds = 10;
         // 確定
