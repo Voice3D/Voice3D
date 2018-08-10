@@ -38,7 +38,7 @@ public class Pivot : NetworkBehaviour {
                 transform.LookAt(new Vector3(0, transform.position.y, 0));
                 transform.Rotate(new Vector3(0, 180, 0));
                 var h = TextManager.tm.PosiText(child.m_id, child.m_size, this);
-                float ps = (float)TextManager.tm.m_top - TextManager.tm.heightPL * (child.m_size - 1 + h);
+                float ps = (float)TextManager.tm.m_top - TextManager.tm.heightPL * h;
                 Vector3 temp = transform.position;
                 temp.y = ps;
                 transform.position = temp;
@@ -55,7 +55,7 @@ public class Pivot : NetworkBehaviour {
         child.m_size = textSize;
         m_velocity = direction * Player.p.m_shotSpeed;
         child.transform.localEulerAngles = Vector3.zero;
-        child.transform.localScale *= textSize;
+        transform.localScale *= textSize;
         child.m_id = i;
         child.GetComponent<TextMesh>().text = c.ToString();
         //Player.p.AddTexts(text);

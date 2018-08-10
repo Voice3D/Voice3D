@@ -58,6 +58,8 @@ public class Controller : NetworkBehaviour
     [SyncVar]
     public bool textStop = false;
 
+    public bool vr = true;
+
 
     void Start()
     {
@@ -71,7 +73,7 @@ public class Controller : NetworkBehaviour
 
     void Update()
     {
-        rb.angularVelocity = new Vector3(0,0,0);
+        rb.angularVelocity = new Vector3(0, 0, 0);
 
         //表示、非表示の変更
         if (Input.GetButtonDown("Menu")) menu = !menu;
@@ -80,18 +82,29 @@ public class Controller : NetworkBehaviour
         light.SetActive(!menu);
 
         //地面に触れている場合発動
+
         if (ground)
         {
             //ユニティちゃんの移動
-            var posi = TouchpadExmpleleft.position;
-            float dx = posi.x;
-            float dy = posi.y;
-            Debug.Log("xy: "+dx+", "+dy);
-           
-            if (Mathf.Abs(dx)<0.1 && Mathf.Abs(dy)<0.1)
+            float dx=0, dy=0;
+            if (vr)
+            {
+                var posi = TouchpadExmpleleft.position;
+                dx = posi.x;
+                dy = posi.y;
+                //Debug.Log("xy: "+dx+", "+dy);
+            }
+            else
+            {
+                player.SetActive(false);
+                dx = Input.GetAxis("Horizontal");
+                dy = Input.GetAxis("Vertical");
+            }
+
+            if (Mathf.Abs(dx) < 0.1 && Mathf.Abs(dy) < 0.1)
             {
                 //何もキーを押していない時はアニメーションをオフにする
-                Debug.Log("stop");
+                //Debug.Log("stop");
                 rb.velocity = new Vector3(0, 0, 0);
                 animator.SetBool("Running", false);
             }
@@ -100,7 +113,7 @@ public class Controller : NetworkBehaviour
                 if (dx < 0) sign = -1;
                 else sign = 1;
                 //angle = Camera.main.transform.eulerAngles;
-                float dir = (Vector3.Angle(Vector3.forward, new Vector3(dx, 0, dy))*sign)%360;
+                float dir = (Vector3.Angle(Vector3.forward, new Vector3(dx, 0, dy)) * sign) % 360;
                 transform.eulerAngles += new Vector3(0, dir, 0);
                 rb.velocity = speed * transform.forward;
                 transform.eulerAngles -= new Vector3(0, dir, 0);
@@ -121,13 +134,12 @@ public class Controller : NetworkBehaviour
                 {
                     deg = (deg - 1) % 12;
                     rotFlag = true;
-                }       
-                transform.eulerAngles = new Vector3(0, deg * 30f-180f, 0);
-                CameraPosi.cp.transform.eulerAngles = new Vector3(0, deg * 30f-180, 0);
+                }
+                transform.eulerAngles = new Vector3(0, deg * 30f - 180f, 0);
+                CameraPosi.cp.transform.eulerAngles = new Vector3(0, deg * 30f - 180, 0);
             }
             else if ((Input.GetAxis("rotR") < 0.9) && (Input.GetAxis("rotL") < 0.9))
             { rotFlag = false; Debug.Log("rot false"); }
-            
         }
         prePosi = transform.position;
         Player.p.transform.position = rightHandObj.position;

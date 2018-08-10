@@ -5,6 +5,7 @@ using UnityEngine;
 public class MyText : MonoBehaviour {
     public int m_id;
     public int m_size;
+    public static float str;
     //public bool start, finish;
 
     public MyText Init(int i, float speed, string c, int size)//文字生成時の初期化
@@ -18,6 +19,7 @@ public class MyText : MonoBehaviour {
 
         m_id = i;
         GetComponent<TextMesh>().text = c;
+        GetComponent<TextMesh>().color = new Color(0, 0, 0, str);
         return this;
     }
 }

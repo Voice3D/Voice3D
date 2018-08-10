@@ -84,15 +84,17 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ThrowText(string s)//テキスト発射要請
+    public void ThrowText(string s, int size)//テキスト発射要請
     {
         //Debug.Log("throw text: "+waiter + ", "+ TextManager.textStop);
-        if (waiter || TextManager.textStop) return;//テキスト発射中もしくは文字の回転が停止中の場合は文字を発射しない
         if (m_mode == 1)//音声コマンド
         {
             OpeRecognize(s);
             return;
         }
+
+        if (waiter || TextManager.textStop) return;//テキスト発射中もしくは文字の回転が停止中の場合は文字を発射しない
+        
         waitS = s;
         counter = waitS.Length;
         if (counter > MaxLength)
@@ -104,6 +106,7 @@ public class Player : MonoBehaviour
         m_shotTimer = m_shotInterval;
         shot_pos = transform.position;
         shot_rot = transform.rotation;
+        textSize = size;
         //texts = new List<MyText>();
     }
 
@@ -166,7 +169,7 @@ public class Player : MonoBehaviour
         for (int i=0;i<temp.Count;i++)
         {
             temp[i].transform.parent.GetComponent<Pivot>().CmdSa(true);
-            temp[i].transform.position = new Vector3(basePos.x+i, basePos.y, basePos.z);
+            temp[i].transform.position = new Vector3((basePos.x+=temp[i].m_size), basePos.y, basePos.z);
             temp[i].transform.rotation = transform.parent.rotation;
             temp[i].transform.parent.GetComponent<Pivot>().rotation = false;
             temp[i].GetComponent<BoxCollider>().isTrigger = false;
@@ -181,6 +184,7 @@ public class Player : MonoBehaviour
     {
         if (flag) m_vr.StartRecognition();
         else m_vr.StopRecognition();
+        Debug.Log("recog: "+flag);
     }
     /*
     public void AddTexts(MyText mt)

@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
     public void InputLogger()
     {
         string inputValue = inputField.text;
+        MyText.str = 1.0f;
         if (inputValue.Length > 0 && inputValue[0] == '/')
         {
             switch (inputValue)
@@ -33,7 +34,7 @@ public class InputManager : MonoBehaviour
             }
             TextManager.tm.Operation(opeCode);
         }
-        else Player.p.ThrowText(inputValue);
+        else Player.p.ThrowText(inputValue, 1);
 
         InitInputField();
     }

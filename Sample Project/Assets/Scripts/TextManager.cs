@@ -20,7 +20,7 @@ public class TextManager : MonoBehaviour {
     void Start()
     {
         tm = this;
-        heightPL = (m_top - m_bottom) / m_dev;
+        heightPL = (float)(m_top - m_bottom) / m_dev;
         line = new int[m_dev];
         LineManager = new List<Pivot>[m_dev];
         for (int i = 0; i < m_dev; i++)
@@ -68,7 +68,7 @@ public class TextManager : MonoBehaviour {
         {
             LineManager[l].Add(pivot);
         }
-        return 0;
+        return l;
     }
 
     //音声コマンド処理

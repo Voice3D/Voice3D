@@ -28,7 +28,7 @@ public class StartButton : NetworkBehaviour
     {        
         
             float lr = Input.GetAxis("Horizontal");
-            Debug.Log("LR: "+Mathf.Abs(lr));
+            //Debug.Log("LR: "+Mathf.Abs(lr));
             if (lr == -1)
             {
                 Lbutton.colors = colors;
